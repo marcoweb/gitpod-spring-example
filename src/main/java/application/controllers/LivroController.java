@@ -60,4 +60,19 @@ public class LivroController {
 
         return "redirect:/livro/list";
     }
+
+    @RequestMapping("/delete/{id}")
+    public String formDelete(Model model, @PathVariable int id) {
+        Optional<Livro> livro = livrosRepo.findById(id);
+        if(!livro.isPresent())
+            return "redirect:/livro/list";
+        model.addAttribute("livro", livro.get());
+        return "/livro/delete.jsp";
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public String confirmDelete(@RequestParam("id") int id) {
+        livrosRepo.deleteById(id);
+        return "redirect:/livro/list";
+    }
 }
